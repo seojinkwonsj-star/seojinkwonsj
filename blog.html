@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Dispatch</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14171f;
+    --ink-soft: #3a3d47;
+    --muted: #6b6e76;
+    --paper: #f6f5f1;
+    --paper-raised: #ffffff;
+    --line: #dedad1;
+    --accent: #1e5f5b;
+    --accent-2: #b8935f;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Inter', -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    --wrap: 760px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
+  a { color: inherit; text-decoration: none; cursor: pointer; }
+
+  .masthead { border-bottom: 1px solid var(--line); background: var(--paper); }
+  .masthead__inner { display: flex; align-items: baseline; justify-content: space-between; padding: 28px 24px 20px; }
+  .masthead__brand { font-family: var(--font-display); font-weight: 600; font-size: 1.6rem; letter-spacing: -0.01em; }
+  .masthead__nav { display: flex; gap: 20px; font-size: 0.9rem; color: var(--muted); }
+  .masthead__nav a:hover { color: var(--accent); }
+  .dateline { border-top: 1px solid var(--line); background: var(--ink); color: var(--paper); }
+  .dateline__inner { display: flex; justify-content: space-between; align-items: center; padding: 8px 24px; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; color: #cfd3d6; }
+  .dateline__meta { color: var(--accent-2); }
+
+  .page { padding: 48px 24px 80px; }
+  .intro { font-family: var(--font-display); font-size: 1.15rem; color: var(--ink-soft); margin-bottom: 40px; max-width: 56ch; }
+
+  .ledger__row { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding: 22px 0; border-bottom: 1px solid var(--line); transition: padding-left 0.15s ease; cursor: pointer; }
+  .ledger__row:first-child { border-top: 1px solid var(--line); }
+  .ledger__row:hover { padding-left: 8px; color: var(--accent); }
+  .ledger__title { font-family: var(--font-display); font-weight: 500; font-size: 1.2rem; letter-spacing: -0.01em; }
+  .ledger__meta { display: flex; align-items: center; gap: 12px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+  .tag { display: inline-block; padding: 2px 9px; border: 1px solid var(--accent); border-radius: 999px; color: var(--accent); font-size: 0.68rem; letter-spacing: 0.03em; }
+  .empty { color: var(--muted); }
+
+  .post-stamp { display: flex; align-items: center; gap: 12px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); margin-bottom: 18px; }
+  .post-title { font-family: var(--font-display); font-size: 2.3rem; line-height: 1.2; letter-spacing: -0.01em; margin: 0 0 14px; }
+  .post-lede { font-family: var(--font-display); font-size: 1.2rem; color: var(--ink-soft); margin: 0 0 36px; padding-bottom: 36px; border-bottom: 1px solid var(--line); }
+  .post-body { font-size: 1.05rem; }
+  .post-body h2 { font-family: var(--font-display); font-size: 1.5rem; margin-top: 2.2em; }
+  .post-body h3 { font-family: var(--font-display); font-size: 1.2rem; margin-top: 1.8em; }
+  .post-body p { margin: 1.1em 0; }
+  .post-body a { color: var(--accent); border-bottom: 1px solid var(--accent); }
+  .post-body blockquote { margin: 1.6em 0; padding: 4px 0 4px 20px; border-left: 3px solid var(--accent-2); color: var(--ink-soft); font-style: italic; }
+  .post-body code { font-family: var(--font-mono); background: var(--paper-raised); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; font-size: 0.88em; }
+  .post-body pre { background: var(--ink); color: #e8e6df; padding: 18px 20px; border-radius: 8px; overflow-x: auto; }
+  .post-body pre code { background: none; border: none; color: inherit; padding: 0; }
+  .post-body img { max-width: 100%; border-radius: 6px; }
+  .post-nav { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); font-family: var(--font-mono); font-size: 0.85rem; }
+  .post-nav a:hover { color: var(--accent); }
+
+  .site-footer { border-top: 1px solid var(--line); padding: 28px 0 48px; }
+  .site-footer__inner { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
+  .site-footer__sep { margin: 0 8px; }
+
+  [hidden] { display: none !important; }
+
+  @media (max-width: 560px) {
+    .post-title { font-size: 1.7rem; }
+    .masthead__inner { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .ledger__row { flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+  <header class="masthead">
+    <div class="wrap masthead__inner">
+      <a class="masthead__brand" href="#/" onclick="showList()">The Dispatch</a>
+      <nav class="masthead__nav">
+        <a href="#/" onclick="showList()">글</a>
+        <a href="#/about" onclick="showAbout()">소개</a>
+      </nav>
+    </div>
+    <div class="dateline">
+      <div class="wrap dateline__inner">
+        <span>Notes on work, strategy, and building things well</span>
+        <span class="dateline__meta" id="volMeta">Vol. — 2026</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap page">
+
+    <!-- 글 목록 화면 -->
+    <div id="view-list">
+      <p class="intro">일과 전략, 그리고 좋은 것을 만드는 과정에 대한 생각을 기록합니다.</p>
+      <section class="ledger" id="ledger" aria-label="글 목록"></section>
+    </div>
+
+    <!-- 소개 화면 -->
+    <div id="view-about" hidden>
+      <h1 class="post-title">소개</h1>
+      <p class="post-lede">안녕하세요, 이 블로그는 일과 전략, 그리고 좋은 것을 만드는 과정에 대한 생각을 기록하는 공간입니다.</p>
+      <div class="post-body">
+        <p>이 문단을 자신을 소개하는 내용으로 바꿔보세요 — 하는 일, 관심 분야, 이 블로그를 시작한 이유 등을 적으면 됩니다.</p>
+        <h2>연락처</h2>
+        <p>이메일: you@example.com<br>GitHub: <a href="https://github.com/username">github.com/username</a></p>
+      </div>
+    </div>
+
+    <!-- 글 상세 화면 -->
+    <div id="view-post" hidden>
+      <article>
+        <div class="post-stamp">
+          <span class="tag" id="postTag"></span>
+          <time id="postDate"></time>
+        </div>
+        <h1 class="post-title" id="postTitle"></h1>
+        <p class="post-lede" id="postLede"></p>
+        <div class="post-body" id="postBody"></div>
+      </article>
+      <nav class="post-nav"><a href="#/" onclick="showList()">← 목록으로</a></nav>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap site-footer__inner">
+      <span>© 2026 Your Name</span>
+      <span class="site-footer__sep">·</span>
+      <span>Built with a single HTML file &amp; GitHub Pages</span>
+    </div>
+  </footer>
+
+<script>
+  /* ============================================================
+     글 목록. 새 글을 쓰려면 이 배열 맨 위에 객체를 하나 추가하세요.
+     id: 영문/숫자, 공백없이 (주소창 해시로 쓰입니다)
+     date: "YYYY-MM-DD"
+     body: HTML 문자열로 작성 (문단은 <p>...</p>로 감싸기)
+     ============================================================ */
+  const posts = [
+    {
+      id: "second-post",
+      title: "글쓰기가 어려운 진짜 이유",
+      category: "Notes",
+      date: "2026-07-24",
+      excerpt: "두 번째 예시 글입니다. 이 항목을 지우거나 참고용으로 남겨두고 새 글을 추가해도 됩니다.",
+      body: `
+        <p>이 글은 posts 배열의 두 번째 예시입니다. 실제로 글을 쓸 때도 이 객체를 복사한 뒤 내용만 바꾸면 됩니다.</p>
+        <h2>목록은 순서대로</h2>
+        <p>배열 맨 위에 추가한 글이 홈 화면 목록 맨 위에 표시됩니다. 최신 글을 위에 두는 걸 추천해요.</p>
+      `
+    },
+    {
+      id: "welcome",
+      title: "블로그를 시작하며",
+      category: "Notes",
+      date: "2026-07-23",
+      excerpt: "이 공간을 왜 만들었는지, 그리고 앞으로 무엇을 다룰지에 대한 짧은 소개입니다.",
+      body: `
+        <p>이 글은 예시 게시물입니다. posts 배열에서 이 항목을 수정하거나 삭제하고, 같은 형식으로 새 글을 추가하면 됩니다.</p>
+        <h2>새 글을 쓰는 방법</h2>
+        <p>이 파일 하단의 <code>const posts = [...]</code> 배열 맨 위에 아래 형식으로 객체를 하나 추가하세요.</p>
+        <pre><code>{
+  id: "my-new-post",
+  title: "글 제목",
+  category: "카테고리",
+  date: "2026-08-01",
+  excerpt: "목록에 보일 한 줄 요약",
+  body: \`&lt;p&gt;본문 내용&lt;/p&gt;\`
+}</code></pre>
+        <p>저장하면 자동으로 홈 화면 목록과 상세 페이지가 만들어집니다. 별도 파일을 만들 필요가 없습니다.</p>
+      `
+    }
+  ];
+
+  function readMinutes(html) {
+    const words = html.replace(/<[^>]+>/g, " ").trim().split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.round(words / 200));
+  }
+
+  function formatDate(iso) {
+    const [y, m, d] = iso.split("-");
+    return `${y}.${m}.${d}`;
+  }
+
+  function renderList() {
+    const el = document.getElementById("ledger");
+    document.getElementById("volMeta").textContent = `Vol. ${posts.length} — 2026`;
+    if (posts.length === 0) {
+      el.innerHTML = `<p class="empty">아직 글이 없습니다. posts 배열에 첫 글을 추가해 보세요.</p>`;
+      return;
+    }
+    el.innerHTML = posts.map(p => `
+      <a class="ledger__row" href="#/post/${p.id}" onclick="showPost('${p.id}')">
+        <span class="ledger__title">${p.title}</span>
+        <span class="ledger__meta">
+          <span class="tag">${p.category}</span>
+          <time datetime="${p.date}">${formatDate(p.date)}</time>
+          <span>${readMinutes(p.body)}분</span>
+        </span>
+      </a>
+    `).join("");
+  }
+
+  function hideAllViews() {
+    document.getElementById("view-list").hidden = true;
+    document.getElementById("view-about").hidden = true;
+    document.getElementById("view-post").hidden = true;
+  }
+
+  function showList() {
+    hideAllViews();
+    document.getElementById("view-list").hidden = false;
+    location.hash = "#/";
+  }
+
+  function showAbout() {
+    hideAllViews();
+    document.getElementById("view-about").hidden = false;
+    location.hash = "#/about";
+  }
+
+  function showPost(id) {
+    const p = posts.find(x => x.id === id);
+    if (!p) { showList(); return; }
+    hideAllViews();
+    document.getElementById("postTag").textContent = p.category;
+    const dEl = document.getElementById("postDate");
+    dEl.textContent = formatDate(p.date) + " 작성";
+    dEl.setAttribute("datetime", p.date);
+    document.getElementById("postTitle").textContent = p.title;
+    document.getElementById("postLede").textContent = p.excerpt;
+    document.getElementById("postBody").innerHTML = p.body;
+    document.getElementById("view-post").hidden = false;
+    location.hash = "#/post/" + id;
+    window.scrollTo(0, 0);
+  }
+
+  function routeFromHash() {
+    const hash = location.hash.replace(/^#\/?/, "");
+    if (hash.startsWith("post/")) {
+      showPost(hash.slice(5));
+    } else if (hash === "about") {
+      showAbout();
+    } else {
+      showList();
+    }
+  }
+
+  renderList();
+  window.addEventListener("hashchange", routeFromHash);
+  routeFromHash();
+</script>
+
+</body>
+</html>
